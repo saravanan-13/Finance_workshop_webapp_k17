@@ -1,0 +1,15 @@
+<div data-ng-include="'views/header.html'"></div>
+<div ng-controller="LoginController as ctrl">
+    <form name="loginForm" class="container" style="width: 60%; margin: 25vh 0 0 39%">
+        <div input-field style="width: 35%; margin: 10% 0 0 0%">
+            <input type="text" ng-model="ctrl.email" length="150">
+            <label>E-mail</label>
+        </div>
+        <div input-field style="width: 35%; margin: 0 0 0 0%">
+            <input type="password" ng-model="ctrl.password" length="150">
+            <label>Password</label>
+        </div>
+        <a class="waves-effect waves-light btn col s4 offset-s4 l2 offset-l1" style="margin: 4% 0 0 0vw; width: 35%" ng-disabled="ctrl.email == undefined || ctrl.password == undefined"
+           ng-click="ctrl.login()">Login</a>
+    </form>
+</div>

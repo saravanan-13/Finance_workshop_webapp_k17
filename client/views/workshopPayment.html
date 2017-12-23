@@ -1,0 +1,191 @@
+<div data-ng-include="'views/header.html'"></div>
+<div  ng-controller="WorkshopPaymentController as ctrl">
+
+    <div input-field class="col s3" style="float: left" ng-if="ctrl.workshopDataLoaded && ctrl.isAdmin">
+        <select style="width: 25vw; margin: 2vh 0 0 27vw" ng-model="ctrl.workshop" material-select watch class="browser-default">
+            <option ng-repeat="workshop in ctrl.workshopsList">{{workshop}}</option>
+        </select>
+    </div>
+    <a class="waves-effect waves-light btn col s4 offset-s4 l2 offset-l1 login" style="margin: 2vh 0 0 2vw"
+       ng-click="ctrl.getWorkshopDetails()" ng-if="ctrl.workshopDataLoaded && ctrl.isAdmin">GetDetails</a>
+    <a class="waves-effect waves-light btn col s2 offset-s4 l2 offset-l1 login" style="margin: 2vh 2vw 0 2vw; float: right; font-size: 0.75em" ng-csv="ctrl.exportArrayToday"
+       filename="{{ctrl.workshop}}{{ctrl.currentDate | date: 'ddMM'}}.csv"
+       ng-if="ctrl.workshopDataLoaded">Download - Today</a>
+    <a class="waves-effect waves-light btn col s2 offset-s4 l2 offset-l1 login" style="margin: 2vh 0 0 2vw; float: right; font-size: 0.75em" ng-csv="ctrl.exportArrayComplete"
+       filename="{{ctrl.workshop}}-complete.csv"
+       ng-if="ctrl.workshopDataLoaded">Download - Complete</a>
+    <br>
+    <br>
+    <main>
+        <div class="loading" ng-if="!ctrl.workshopPaymentDetailLoaded">
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+            <div class="loading-bar"></div>
+        </div>
+        <div class="container" style="margin: 0 5vw; width: 100vw" ng-if="ctrl.workshopPaymentDetailLoaded">
+
+          <div class="chip" style="background-color: teal; color: white;margin-left: 40% ;height:10%;align:center;">
+              <h5>Total Count: {{ctrl.enrolledList.length}}</h5>
+          </div>
+            <br><br>
+            <div class="switch"  style="float: right; margin-right: 10%;">
+                <label>
+                    Not Paid
+                    <input ng-click="ctrl.switch()" ng-model="ctrl.paid" type="checkbox">
+                    <span class="lever"></span>
+                    Paid
+                </label>
+            </div>
+            <div>
+            <input type="date"  class="datepicker" style="float:left; width: 20%" ng-model="ctrl.fromDate">
+            <input type="date"  class="datepicker" style="float:left; width: 20%; margin-left:5%;" ng-model="ctrl.toDate" >
+            </div>
+            <br>
+            <br>
+            <br><br>
+            <input type="button" ng-click="ctrl.filterByDate()"  class="waves-effect waves-light btn col s2 offset-s4 l2 offset-l1" style="width: 140px;" value="SEARCH">
+            <br>
+            <br>
+            <br>
+            <table id="inventory_table" class="striped centered" style="width: 90vw">
+                <thead>
+                <tr>
+                    <th data-field="name">Id</th>
+                    <th data-field="name">Captain Email</th>
+                    <th data-field="category">Is Paid</th>
+                    <th data-field="category">Change</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr class="hoverable" ng-repeat="item in ctrl.enrolledList">
+                    <td>{{item.id}}</td>
+                    <td>{{item.captain_email}}</td>
+                    <!--<td>
+                        <p>{{workshopPayment.participants[0]}}</p>
+                        <p>{{workshopPayment.participants[1]}}</p>
+                    </td>-->
+
+                    <!--<td>{{workshopPayment.contacts[0]}}</td>-->
+                    <td>
+                      <p ng-if="item.paid"> YES </p>
+                      <p ng-if="!item.paid"> NO </p>
+                    </td>
+                    <td>
+
+                        <p>
+                          <input type="checkbox" id="{{item.id}}" ng-model="item.is_payed" value=true />
+                          <label for="{{item.id}}"></label>
+                        </p>
+
+                     </td>
+                </tr>
+
+                </tbody>
+            </table>
+            <div class="fixed-action-btn horizontal click-to-toggle">
+    <a class="btn-floating btn-large teal">
+      <i class="material-icons" ng-click="ctrl.submit()"> check </i>
+    </a>
+  </div>
+
+
+
+
+
+            <!--Call tracker-->
+            <!--<table class="striped centered" style="width: 90vw">
+                <thead>
+                <tr>
+                    <th data-field="name">Name</th>
+                    <th data-field="category">E-mail Id</th>
+                    <th data-field="category">Contact Number</th>
+                    <th data-field="category">Call Status</th>
+                    <th data-field="category">Comments</th>
+                    <th data-field="category"></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr class="hoverable" ng-repeat="workshopPayment in ctrl.workshopPaymentDetail | filter:search:strict" ng-if="ctrl.showPaid%4 == 0 && workshopPayment.payment == false">
+                    <td>{{workshopPayment.transactionId}}</td>
+                    &lt;!&ndash;<td>
+                        <p>{{workshopPayment.participants[0]}}</p>
+                        <p>{{workshopPayment.participants[1]}}</p>
+                    </td>&ndash;&gt;
+                    <td>
+                        &lt;!&ndash;<p ng-repeat="email in workshopPayment.participants">
+                            {{email}}
+                        </p>&ndash;&gt;
+                        <p ng-if="workshopPayment.participants[0]">{{workshopPayment.participants[0]}}</p>
+                        <p ng-if="workshopPayment.participants[1]">{{workshopPayment.participants[1]}}</p>
+                        <p ng-if="workshopPayment.participants[2]">{{workshopPayment.participants[2]}}</p>
+                        <p ng-if="workshopPayment.participants[3]">{{workshopPayment.participants[3]}}</p>
+                        <p ng-if="workshopPayment.participants[4]">{{workshopPayment.participants[4]}}</p>
+                    </td>
+                    &lt;!&ndash;<td>{{workshopPayment.contacts[0]}}</td>&ndash;&gt;
+                    <td>
+                        &lt;!&ndash;<span ng-repeat="contact in workshopPayment.contacts">
+                            {{workshopPayment.contacts[$index]}}
+                        </span>&ndash;&gt;
+                        <p ng-if="workshopPayment.contacts[0]">{{workshopPayment.contacts[0]}}</p>
+                        <p ng-if="workshopPayment.contacts[1]">{{workshopPayment.contacts[1]}}</p>
+                        <p ng-if="workshopPayment.contacts[2]">{{workshopPayment.contacts[2]}}</p>
+                        <p ng-if="workshopPayment.contacts[3]">{{workshopPayment.contacts[3]}}</p>
+                        <p ng-if="workshopPayment.contacts[4]">{{workshopPayment.contacts[4]}}</p>
+                    </td>
+                    <td ng-init="ctrl.paymentStatus[$index] = ctrl.options[0]">
+                        &lt;!&ndash;<select material-select watch class="browser-default" disabled ng-if="workshopPayment.payment">
+                            <option value="true" selected disabled>True</option>
+                            <option value="false">False</option>
+                        </select>&ndash;&gt;
+                        <select material-select ng-model="ctrl.paymentStatus[$index]" watch class="browser-default" ng-if="workshopPayment.payment == false">
+                            <option value="{{$index}}" ng-repeat="value in ctrl.options">{{value}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="input-field col s3" style="margin: 0 0 0 1vw">
+                            <textarea id="textarea1" class="materialize-textarea" style="padding: 0 0 0 0;"></textarea>
+                            <label for="textarea1">Comments</label>
+                        </div>
+                    </td>
+                    <td><a class=" modal-action waves-effect waves-light btn" ng-if="!workshopPayment.payment" ng-click="ctrl.updatePayment($index)">Update</a></td>
+                </tr>
+                <tr class="hoverable" ng-repeat="workshopPayment in ctrl.workshopPaymentDetail | filter:search:strict" ng-if="ctrl.showPaid%4 != 0 && workshopPayment.payment == true">
+                    <td>{{workshopPayment.transactionId}}</td>
+                    <td>
+                        <p ng-if="workshopPayment.participants[0]">{{workshopPayment.participants[0]}}</p>
+                        <p ng-if="workshopPayment.participants[1]">{{workshopPayment.participants[1]}}</p>
+                        <p ng-if="workshopPayment.participants[2]">{{workshopPayment.participants[2]}}</p>
+                        <p ng-if="workshopPayment.participants[3]">{{workshopPayment.participants[3]}}</p>
+                        <p ng-if="workshopPayment.participants[4]">{{workshopPayment.participants[4]}}</p>
+                    </td>
+                    <td>
+                        <p ng-if="workshopPayment.contacts[0]">{{workshopPayment.contacts[0]}}</p>
+                        <p ng-if="workshopPayment.contacts[1]">{{workshopPayment.contacts[1]}}</p>
+                        <p ng-if="workshopPayment.contacts[2]">{{workshopPayment.contacts[2]}}</p>
+                        <p ng-if="workshopPayment.contacts[3]">{{workshopPayment.contacts[3]}}</p>
+                        <p ng-if="workshopPayment.contacts[4]">{{workshopPayment.contacts[4]}}</p>
+                    </td>
+                    <td>{{workshopPayment.date}}</td>
+                    <td ng-init="ctrl.paymentStatus[$index] = ctrl.options[0]">
+                        <select material-select watch class="browser-default" disabled ng-if="workshopPayment.payment && !ctrl.isAdmin">
+                            <option value="true" selected>True</option>
+                            <option value="false">False</option>
+                        </select>
+                        <select material-select watch class="browser-default" ng-if="workshopPayment.payment && ctrl.isAdmin">
+                            <option value="true" selected>True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </td>
+                    <td><a class=" modal-action waves-effect waves-light btn" ng-if="ctrl.isAdmin" ng-click="ctrl.updatePayment($index)">Update</a></td>
+                </tr>
+                </tbody>
+            </table>-->
+
+
+        </div>
+    </main>
+
+</div>

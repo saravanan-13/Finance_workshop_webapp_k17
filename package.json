@@ -1,0 +1,14 @@
+{
+  "name": "financewebapp",
+  "version": "1.0.0",
+  "description": "A webapp to update payment status of workshops",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "CTF Tech Team",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}

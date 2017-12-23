@@ -1,0 +1,11 @@
+<div>
+    <header ng-controller="LoginController as ctrl">
+        <nav style="background: teal">
+            <a href="#!" class="brand-logo"><span class="opensans brandlogo">&nbsp;Workshop Payment'17</span></a>
+            <ul style="float: right" ng-show="ctrl.loggedIn">
+                <li class="waves-effect waves-light" ng-click="ctrl.logout()"><a href="#" >Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div ui-view></div>
+</div>

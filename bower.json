@@ -1,0 +1,17 @@
+{
+  "name": "financewebapp",
+  "description": "A webapp to update payment status of workshops",
+  "main": "app.js",
+  "authors": [
+    "CTF Tech Team"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
